@@ -11,18 +11,50 @@ export default function ChatInterface() {
 
     const flatListRef = useRef(null);
 
+    // const handleSendMessage = () => {
+    //     if (message.trim() !== '') {
+    //         setMessages([...messages, { type: 'user', text: message.trim() }]);
+    //         setMessage('');
+
+    //         setIsTyping(true);
+
+    //         // Simulate a machine reply
+    //         setTimeout(() => {
+    //             setIsTyping(false);
+    //             setMessages(prev => ([...prev, { type: 'machine', text: 'Hello, user! I got your message.' }]));
+    //         }, 1000);
+    //     }
+    // };
     const handleSendMessage = () => {
         if (message.trim() !== '') {
             setMessages([...messages, { type: 'user', text: message.trim() }]);
             setMessage('');
 
+            console.log("Sending message:", message.trim());  // <-- This will log the message being sent
+
             setIsTyping(true);
 
-            // Simulate a machine reply
-            setTimeout(() => {
-                setIsTyping(false);
-                setMessages(prev => ([...prev, { type: 'machine', text: 'Hello, user! I got your message.' }]));
-            }, 1000);
+            // Send the user's message to the Flask server
+            fetch('https://e6c1-150-204-195-10.ngrok-free.app/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    prompt: message.trim()
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    setIsTyping(false);
+                    console.log("Received response:", data.response);  // <-- This will log the received response
+                    // Display the server's response
+                    setMessages(prev => ([...prev, { type: 'machine', text: data.response }]));
+                })
+                .catch(error => {
+                    setIsTyping(false);
+                    console.error("There was an error sending the message:", error);
+                });
         }
     };
 
