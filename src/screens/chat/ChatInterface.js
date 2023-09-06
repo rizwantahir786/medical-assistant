@@ -10,21 +10,6 @@ export default function ChatInterface() {
     const [isTyping, setIsTyping] = useState(false);
 
     const flatListRef = useRef(null);
-
-    // const handleSendMessage = () => {
-    //     if (message.trim() !== '') {
-    //         setMessages([...messages, { type: 'user', text: message.trim() }]);
-    //         setMessage('');
-
-    //         setIsTyping(true);
-
-    //         // Simulate a machine reply
-    //         setTimeout(() => {
-    //             setIsTyping(false);
-    //             setMessages(prev => ([...prev, { type: 'machine', text: 'Hello, user! I got your message.' }]));
-    //         }, 1000);
-    //     }
-    // };
     const handleSendMessage = () => {
         if (message.trim() !== '') {
             setMessages([...messages, { type: 'user', text: message.trim() }]);
